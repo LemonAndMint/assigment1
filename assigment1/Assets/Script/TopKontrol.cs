@@ -2,41 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Hem topun dönüşünü kontrol eder hem de top ekleme çıkarma fonksiyonlarını barındırır.
 public class TopKontrol : MonoBehaviour
 {
   public GameObject topPref;
   public float hiz;
+  public DynamicJoystick joystick;
+  bool istouched;
   List<GameObject> balls;
   void Start()
   {
     balls = new List<GameObject>();
 
-    addBall();
-    addBall();
-    addBall();
-    addBall();
-    addBall();
-
+    addBall(3); //başlangıç topları
   }
 
   void Update()
   {
-    transform.position += Vector3.right * hiz * Time.deltaTime;  
-    transform.RotateAround(transform.position, Vector3.forward, 1f); //Dönme hareketi
+    istouched = joystick.backg.activeSelf;
+    switch (istouched)
+    {
+      case true:
+        transform.RotateAround(transform.position, Vector3.forward, 0.5f); //Dönme hareketi,
+        break;
+      case false:
+        transform.position += transform.right * hiz * Time.deltaTime;
+        break;
+    }
   }
 
-  public void addBall()
+  public void addBall(int i)
   {
-    balls.Add(InsBall());
+    for(;i > 0; i--){
+      balls.Add(InsBall());
+    }
   }
-  public void popBall(GameObject ball)
+  public void popBall(int i)
   {
-    int ballIndex;
-    ballIndex = balls.IndexOf(ball);
-    balls.RemoveRange(ballIndex, balls.Count - (1 + ballIndex));
-    Debug.Log(ballIndex);
+    GameObject willDestroyBall;
+    for(;i > 0; i--){
+      willDestroyBall = balls[balls.Count - 1];
+      balls.RemoveAt(balls.Count - 1);
+      Destroy(willDestroyBall);
+    }
   }
-  GameObject InsBall(){
+  private GameObject InsBall(){
     GameObject InsBall;
     Vector3 insLocation;
     insLocation = Vector3.zero;
