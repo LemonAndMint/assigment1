@@ -6,6 +6,8 @@ TagManager:
   tags:
   - increase
   - decrease
+  - obstacle
+  - finish
   layers:
   - Default
   - TransparentFX
